@@ -3,14 +3,17 @@ import * as log from "npmlog";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/AddressRoutes";
 import db from "./db";
+const cors = require('cors'); 
 
 class App {
+
 
     public app: express.Application;
     public routes: Routes = new Routes();
     
     constructor() {
         this.app = express();
+        this.app.use(cors());
         this.config();        
         this.routes.initRoutes(this.app);    
         this.mySQLSetup();
