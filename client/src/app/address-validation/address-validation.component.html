@@ -1,2 +1,8 @@
-<div *ngIf="addressExists">Address does exist!</div>
-<div *ngIf="!addressExists">Address does not exist!</div>
+<div>
+    <input [(ngModel)]="address.street" placeholder="street">
+    <input [(ngModel)]="address.number" placeholder="number">
+    <input [(ngModel)]="address.city" placeholder="city">
+    <button (click)="validateAddress(address)">Validate</button>
+    <div *ngIf="addressExists">Address does exist!</div>
+    <div *ngIf="!addressExists">Address does not exist!</div>
+</div>

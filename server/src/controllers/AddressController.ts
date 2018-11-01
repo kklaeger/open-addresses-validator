@@ -20,8 +20,15 @@ export class AddressController{
     }
 
     public validateAddress (req: Request, res: Response) {
-        // TODO: implement validator
-        res.send(true);
+        const sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ?";  
+        db.query(sql, [req.body.street, req.body.number, req.body.city], (err, result) => {
+            if (err) res.send(err);
+            if (result.length > 0) {
+                res.send(true);
+            } else {
+                res.send(false);
+            } 
+        });
     }
 
 }

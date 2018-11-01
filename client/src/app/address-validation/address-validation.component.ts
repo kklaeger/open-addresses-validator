@@ -10,23 +10,18 @@ import { Address } from '../model/address';
 })
 export class AddressValidationComponent implements OnInit {
 
-  addresses: Address[];
   addressExists: Boolean;
+  address: Address;
 
   constructor(private addressService: AddressService) { }
 
   ngOnInit(): void {
-    this.getAddresses();
-    const address: Address = new Address();
-    address.street = 'test';
-    address.number = 'test';
-    address.city = 'test';
-    this.validateAddress(address);
-  }
-
-  getAddresses(): void {
-    this.addressService.getAddresses()
-      .subscribe(addresses => this.addresses = addresses);
+    this.address = {
+      id: 0,
+      street: '',
+      number: '',
+      city: ''
+    };
   }
 
   validateAddress(address: Address): void {

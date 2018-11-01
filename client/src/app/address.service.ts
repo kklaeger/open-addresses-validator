@@ -15,17 +15,12 @@ const httpOptions = {
 })
 export class AddressService {
 
-  configUrl = 'http://localhost:3000/address';
+  private host = 'http://localhost:3000/address';
 
   constructor(private http: HttpClient) { }
 
-  getAddresses(): Observable<Address[]> {
-    return this.http.get<Address[]>(this.configUrl);
-  }
-  
   validateAddress(address: Address): Observable<Boolean> {
-    console.log(address)
-    return this.http.post<Boolean>(this.configUrl, address, httpOptions);
+    return this.http.post<Boolean>(this.host, address, httpOptions);
   }
 
 }
