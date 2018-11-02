@@ -1,0 +1,83 @@
+.validator {
+    padding: 16px;
+    background-color: white;
+    max-width: 35%;
+    margin: auto;
+    right: 0;
+    left: 0;
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.input-element {
+    width: 90%;
+    padding: 2px 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.message-element, .button-element{
+    padding: 2px 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.button-element {
+    width: 30%;
+}
+
+.message-element {
+    width: 50%;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+input, button {
+    font-size: 12pt;
+    border: none;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0 10px 0;
+    display: inline-block;
+    background: #f1f1f1;
+}
+
+button {
+    background-color: #eee;
+    padding: 10px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    cursor: hand;
+}
+
+button:hover {
+    background-color: #cfd8dc;
+}
+
+button:disabled {
+    background-color: #eee;
+    color: #aaa;
+    cursor: auto;
+}
+
+::placeholder { 
+    font-style: italic;
+    color: #aaa;
+    opacity: 1; 
+}
+
+:-ms-input-placeholder { 
+    font-style: italic;
+    color: #aaa;
+}
+
+::-ms-input-placeholder { 
+    font-style: italic;
+    color: #aaa;
+}

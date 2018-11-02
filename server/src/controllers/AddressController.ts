@@ -8,10 +8,11 @@ export class AddressController{
         const street = req.body.street.trim();
         const streetNumber = req.body.streetNumber.trim();
         const city = req.body.city.trim();
-        const postcode = req.body.postcode.trim();
+        let postcode = req.body.postcode;
         let sql; 
         if (postcode && postcode !== "") {
             sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode = ?";
+            postcode = postcode.trim();
         } else {
             sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode IS NULL";
         }

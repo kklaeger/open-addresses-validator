@@ -1,8 +1,27 @@
-<div>
-    <input [(ngModel)]="address.street" placeholder="Street">
-    <input [(ngModel)]="address.streetNumber" placeholder="Street No.">
-    <input [(ngModel)]="address.city" placeholder="City">
-    <input [(ngModel)]="address.postcode" placeholder="Postcode">
-    <button (click)="validateAddress(address)">Check Address!</button>
-    <div *ngIf="showMessage">{{message}}</div>
+<div class="validator">
+    <div class="input-element">
+        Street:
+        <input [(ngModel)]="address.street" placeholder="Street">
+    </div>    
+    <div class="input-element">
+        Street No:
+        <input [(ngModel)]="address.streetNumber" placeholder="Street No.">
+    </div>
+    <div class="input-element">
+        City:
+        <input [(ngModel)]="address.city" placeholder="City">
+    </div>
+    <div class="input-element">
+        Postocde:
+        <input [(ngModel)]="address.postcode" placeholder="Postcode">
+    </div>
+    <div class="button-element">
+        <button (click)="validateAddress(address)">Check Address!</button>
+    </div>
+    <div class="message-element" *ngIf="showMessage">
+        {{message}}
+    </div>
+
 </div>
+
+    

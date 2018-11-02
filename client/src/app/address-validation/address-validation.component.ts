@@ -32,9 +32,9 @@ export class AddressValidationComponent implements OnInit {
     this.addressService.validateAddress(address)
       .subscribe((res: AddressValidationDTO ) => {
         if (res.addressExists) {
-          this.message = 'Address exists';
+          this.message = 'Address exists!';
         } else {
-          this.message = 'Address does not exist';
+          this.message = 'Address does not exist!';
         }
         this.showMessage = true;
       });
