@@ -12,12 +12,11 @@ export class AddressValidationComponent implements OnInit {
 
   private addressExists: Boolean;
   private address: Address;
-  private message: string;
-  private showMessage: Boolean;
+  private showSuccessMessage: Boolean;
+  private showFailMessage: Boolean;
   private streetValueIsSet: Boolean;
   private numberValueIsSet: Boolean;
   private cityValueIsSet: Boolean;
-  private requiredMessage: String = 'required';
 
   constructor(private addressService: AddressService) { }
 
@@ -29,21 +28,19 @@ export class AddressValidationComponent implements OnInit {
       city: '',
       postcode: null
     };
-    this.showMessage = false;
-    this.resetRequiredFields();
+    this.resetMessages();
   }
 
   validateAddress(address: Address): void {
-    this.resetRequiredFields();
+    this.resetMessages();
     if (this.inputFieldsAreSet(address)) {
       this.addressService.validateAddress(address)
       .subscribe((res: AddressValidationDTO ) => {
         if (res.addressExists) {
-          this.message = 'Address exists!';
+          this.showSuccessMessage = true;
         } else {
-          this.message = 'Address does not exist!';
+          this.showFailMessage = true;
         }
-        this.showMessage = true;
       });
     }
   }
@@ -61,10 +58,12 @@ export class AddressValidationComponent implements OnInit {
     return this.streetValueIsSet && this.numberValueIsSet && this.cityValueIsSet;
   }
 
-  resetRequiredFields(): void {
+  resetMessages(): void {
     this.streetValueIsSet = true;
     this.numberValueIsSet = true;
     this.cityValueIsSet = true;
+    this.showSuccessMessage = false;
+    this.showFailMessage = false;
   }
 
 }

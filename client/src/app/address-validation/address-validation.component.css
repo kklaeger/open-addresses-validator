@@ -9,44 +9,6 @@
     border-radius: 3px;
 }
 
-.input-element {
-    width: 90%;
-    padding: 2px 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-.message-element, .button-element{
-    padding: 2px 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border-radius: 4px;
-}
-
-.button-element {
-    width: 30%;
-}
-
-.message-element {
-    width: 50%;
-    font-weight: bold;
-    font-size: 15pt;
-}
-
-.error-message-element {
-    width: 40%;
-    overflow: hidden; 
-    color: red;
-    font-style: italic;
-}
-
-.label {
-    padding: 0 5px;
-    float:left; 
-}
-
 input, button {
     font-size: 12pt;
     border: none;
@@ -60,22 +22,13 @@ input {
     background: #f1f1f1;
 }
 
-button {
-    background-color: #eee;
-    padding: 10px 10px;
+.input-element {
+    width: 90%;
+    padding: 2px 10px;
+    margin: 8px 0;
+    display: inline-block;
     border-radius: 4px;
-    cursor: pointer;
-    cursor: hand;
-}
-
-button:hover {
-    background-color: #cfd8dc;
-}
-
-button:disabled {
-    background-color: #eee;
-    color: #aaa;
-    cursor: auto;
+    font-weight: bold;
 }
 
 ::placeholder { 
@@ -92,4 +45,43 @@ button:disabled {
 ::-ms-input-placeholder { 
     font-style: italic;
     color: #aaa;
+}
+
+button {
+    background-color: #eee;
+    padding: 10px 10px;
+    margin: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    cursor: hand;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #cfd8dc;
+}
+
+.button-element {
+    display: inline-block;
+}
+
+.message-element[_ngcontent-c1] {
+    width: auto;
+    margin: 15px;
+    float: right;
+    font-weight: bold;
+    font-size: 15pt;
+    border-radius: 4px;
+}
+
+.error-message-element {
+    width: 40%;
+    overflow: hidden; 
+    color: red;
+    font-style: italic;
+}
+
+.label {
+    padding: 0 5px;
+    float:left; 
 }

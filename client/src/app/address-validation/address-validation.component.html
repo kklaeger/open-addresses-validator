@@ -4,7 +4,7 @@
             Street: 
         </div>
         <div *ngIf="!streetValueIsSet" class="error-message-element">
-            {{requiredMessage}}
+            Field must not be empty!
         </div>
         <input [(ngModel)]="address.street" placeholder="Street">
     </div>    
@@ -13,7 +13,7 @@
             Street No: 
         </div>
         <div *ngIf="!numberValueIsSet" class="error-message-element">
-            {{requiredMessage}}
+            Field must not be empty!
         </div>
         <input [(ngModel)]="address.streetNumber" placeholder="Street No.">
     </div>
@@ -22,7 +22,7 @@
             Street No: 
         </div>
         <div *ngIf="!cityValueIsSet" class="error-message-element">
-            {{requiredMessage}}
+            Field must not be empty!
         </div>
         <input [(ngModel)]="address.city" placeholder="City">
     </div>
@@ -33,10 +33,12 @@
     <div class="button-element">
         <button (click)="validateAddress(address)">Check Address!</button>
     </div>
-    <div *ngIf="showMessage" class="message-element">
-        {{message}}
+    <div *ngIf="showSuccessMessage" class="message-element">
+        <span><span class="fa fa-check" style="font-size:35px;color:green"></span>  Address does exist!</span>
     </div>
-
+    <div *ngIf="showFailMessage" class="message-element">
+        <span><span class="fa fa-close" style="font-size:35px;color:red"></span>  Address does not exist!</span>
+    </div>
 </div>
 
     
