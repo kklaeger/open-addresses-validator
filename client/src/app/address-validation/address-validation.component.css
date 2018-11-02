@@ -35,6 +35,18 @@
     font-size: 15pt;
 }
 
+.error-message-element {
+    width: 40%;
+    overflow: hidden; 
+    color: red;
+    font-style: italic;
+}
+
+.label {
+    padding: 0 5px;
+    float:left; 
+}
+
 input, button {
     font-size: 12pt;
     border: none;

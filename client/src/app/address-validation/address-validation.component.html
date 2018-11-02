@@ -1,14 +1,29 @@
 <div class="validator">
     <div class="input-element">
-        Street:
+        <div class="label">
+            Street: 
+        </div>
+        <div *ngIf="!streetValueIsSet" class="error-message-element">
+            {{requiredMessage}}
+        </div>
         <input [(ngModel)]="address.street" placeholder="Street">
     </div>    
     <div class="input-element">
-        Street No:
+        <div class="label">
+            Street No: 
+        </div>
+        <div *ngIf="!numberValueIsSet" class="error-message-element">
+            {{requiredMessage}}
+        </div>
         <input [(ngModel)]="address.streetNumber" placeholder="Street No.">
     </div>
     <div class="input-element">
-        City:
+        <div class="label">
+            Street No: 
+        </div>
+        <div *ngIf="!cityValueIsSet" class="error-message-element">
+            {{requiredMessage}}
+        </div>
         <input [(ngModel)]="address.city" placeholder="City">
     </div>
     <div class="input-element">
@@ -18,7 +33,7 @@
     <div class="button-element">
         <button (click)="validateAddress(address)">Check Address!</button>
     </div>
-    <div class="message-element" *ngIf="showMessage">
+    <div *ngIf="showMessage" class="message-element">
         {{message}}
     </div>
 

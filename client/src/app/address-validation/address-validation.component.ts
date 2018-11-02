@@ -14,6 +14,10 @@ export class AddressValidationComponent implements OnInit {
   private address: Address;
   private message: string;
   private showMessage: Boolean;
+  private streetValueIsSet: Boolean;
+  private numberValueIsSet: Boolean;
+  private cityValueIsSet: Boolean;
+  private requiredMessage: String = 'required';
 
   constructor(private addressService: AddressService) { }
 
@@ -26,10 +30,13 @@ export class AddressValidationComponent implements OnInit {
       postcode: null
     };
     this.showMessage = false;
+    this.resetRequiredFields();
   }
 
   validateAddress(address: Address): void {
-    this.addressService.validateAddress(address)
+    this.resetRequiredFields();
+    if (this.inputFieldsAreSet(address)) {
+      this.addressService.validateAddress(address)
       .subscribe((res: AddressValidationDTO ) => {
         if (res.addressExists) {
           this.message = 'Address exists!';
@@ -38,6 +45,26 @@ export class AddressValidationComponent implements OnInit {
         }
         this.showMessage = true;
       });
+    }
+  }
+
+  inputFieldsAreSet(address: Address): Boolean {
+    if (address.street == null || address.street === '') {
+      this.streetValueIsSet = false;
+    }
+    if (address.streetNumber == null || address.streetNumber === '') {
+      this.numberValueIsSet = false;
+    }
+    if (address.city == null || address.city === '') {
+      this.cityValueIsSet = false;
+    }
+    return this.streetValueIsSet && this.numberValueIsSet && this.cityValueIsSet;
+  }
+
+  resetRequiredFields(): void {
+    this.streetValueIsSet = true;
+    this.numberValueIsSet = true;
+    this.cityValueIsSet = true;
   }
 
 }
