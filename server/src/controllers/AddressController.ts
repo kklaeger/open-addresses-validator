@@ -1,32 +1,29 @@
 import { Request, Response } from 'express';
+import * as log from "npmlog";
 import db from "../db";
 
 export class AddressController{
 
-    public getAllAddresses (req: Request, res: Response) { 
-        const sql = "SELECT * FROM addresses";          
-        db.query(sql, (err, result) => {
-            if (err) res.send(err);
-            res.send(result)
-        });
-    }
-
-    public getAddressById (req: Request, res: Response) { 
-        const sql = "SELECT * FROM addresses WHERE ID = ?";    
-        db.query(sql, [req.params.id], (err, result) => {
-            if (err) res.send(err);
-            res.send(result)
-        });
-    }
-
     public validateAddress (req: Request, res: Response) {
-        const sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ?";  
-        db.query(sql, [req.body.street, req.body.number, req.body.city], (err, result) => {
+        const street = req.body.street.trim();
+        const streetNumber = req.body.streetNumber.trim();
+        const city = req.body.city.trim();
+        const postcode = req.body.postcode.trim();
+        let sql; 
+        if (postcode && postcode !== "") {
+            sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode = ?";
+        } else {
+            sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode IS NULL";
+        }
+        
+        db.query(sql, [street, streetNumber, city, postcode], (err, result) => {
             if (err) res.send(err);
+            log.info('mySQL', 'Requested address:', [street, streetNumber, city, postcode]);
+            log.info('mySQL', 'Found ' + result.length + ' addresses');
             if (result.length > 0) {
-                res.send(true);
+                res.send({addressExists: true})
             } else {
-                res.send(false);
+                res.send({addressExists: false})
             } 
         });
     }

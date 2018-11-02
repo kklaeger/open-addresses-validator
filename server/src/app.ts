@@ -7,7 +7,6 @@ const cors = require('cors');
 
 class App {
 
-
     public app: express.Application;
     public routes: Routes = new Routes();
     

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AddressService } from '../address.service';
 import { Address } from '../model/address';
-
+import { AddressValidationDTO } from '../model/addressValidationDTO';
 
 @Component({
   selector: 'app-address-validation',
@@ -10,23 +10,34 @@ import { Address } from '../model/address';
 })
 export class AddressValidationComponent implements OnInit {
 
-  addressExists: Boolean;
-  address: Address;
+  private addressExists: Boolean;
+  private address: Address;
+  private message: string;
+  private showMessage: Boolean;
 
   constructor(private addressService: AddressService) { }
 
   ngOnInit(): void {
     this.address = {
-      id: 0,
+      id: -1,
       street: '',
-      number: '',
-      city: ''
+      streetNumber: '',
+      city: '',
+      postcode: null
     };
+    this.showMessage = false;
   }
 
   validateAddress(address: Address): void {
     this.addressService.validateAddress(address)
-      .subscribe(res => this.addressExists = res);
+      .subscribe((res: AddressValidationDTO ) => {
+        if (res.addressExists) {
+          this.message = 'Address exists';
+        } else {
+          this.message = 'Address does not exist';
+        }
+        this.showMessage = true;
+      });
   }
 
 }
