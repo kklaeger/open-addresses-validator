@@ -6,7 +6,7 @@
         <div *ngIf="!streetValueIsSet" class="error-message-element">
             Field must not be empty!
         </div>
-        <input [(ngModel)]="address.street" placeholder="Street">
+        <input [(ngModel)]="address.street" placeholder="Street" (keyup.enter)="validateAddress(address)">
     </div>    
     <div class="input-element">
         <div class="label">
@@ -15,20 +15,20 @@
         <div *ngIf="!numberValueIsSet" class="error-message-element">
             Field must not be empty!
         </div>
-        <input [(ngModel)]="address.streetNumber" placeholder="Street No.">
+        <input [(ngModel)]="address.streetNumber" placeholder="Street No." (keyup.enter)="validateAddress(address)">
+    </div>
+    <div class="input-element">
+        Postocde:
+        <input [(ngModel)]="address.postcode" placeholder="Postcode" (keyup.enter)="validateAddress(address)">
     </div>
     <div class="input-element">
         <div class="label">
-            Street No: 
+            City: 
         </div>
         <div *ngIf="!cityValueIsSet" class="error-message-element">
             Field must not be empty!
         </div>
-        <input [(ngModel)]="address.city" placeholder="City">
-    </div>
-    <div class="input-element">
-        Postocde:
-        <input [(ngModel)]="address.postcode" placeholder="Postcode">
+        <input [(ngModel)]="address.city" placeholder="City" (keyup.enter)="validateAddress(address)">
     </div>
     <div class="button-element">
         <button (click)="validateAddress(address)">Check Address!</button>

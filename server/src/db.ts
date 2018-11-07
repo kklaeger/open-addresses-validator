@@ -5,7 +5,7 @@ class DB {
         host: "localhost",
         user: "root",
         password: "1234",
-        database: "open-addresses"
+        database: "openaddresses"
       });     
 }
 
