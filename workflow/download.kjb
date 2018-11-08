@@ -303,8 +303,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>112</xloc>
-      <yloc>224</yloc>
+      <xloc>224</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
       <name>Create Import Directory</name>
@@ -315,11 +315,11 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>256</xloc>
-      <yloc>224</yloc>
+      <xloc>416</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
-      <name>Check if directory is empty</name>
+      <name>Check If Directory Is Empty</name>
       <description/>
       <type>FOLDER_IS_EMPTY</type>
       <foldername>${ADDRESSES_DOWNLOAD_DIR}</foldername>
@@ -329,11 +329,11 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>224</yloc>
+      <xloc>592</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
-      <name>Delete files</name>
+      <name>Delete Files</name>
       <description/>
       <type>DELETE_FILES</type>
       <arg_from_previous>N</arg_from_previous>
@@ -347,22 +347,22 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>352</yloc>
+      <xloc>592</xloc>
+      <yloc>256</yloc>
     </entry>
     <entry>
-      <name>Abort delete files</name>
+      <name>Abort Delete Files</name>
       <description/>
       <type>ABORT</type>
       <message>Error while deleting files</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>480</yloc>
+      <xloc>592</xloc>
+      <yloc>400</yloc>
     </entry>
     <entry>
-      <name>wget addresses file</name>
+      <name>Download Addresses File</name>
       <description/>
       <type>SHELL</type>
       <filename/>
@@ -376,17 +376,16 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip "https://s3.amazonaws.com/data.openaddresses.io/runs/516484/at/tirol.zip"
-</script>
+      <script>wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip ${ADDRESSES_DOWNLOAD_URL}</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>624</xloc>
-      <yloc>224</yloc>
+      <xloc>784</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
-      <name>unzip addresses file</name>
+      <name>Unzip Addresses File</name>
       <description/>
       <type>SHELL</type>
       <filename/>
@@ -405,30 +404,30 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>800</xloc>
-      <yloc>224</yloc>
+      <xloc>960</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
-      <name>Abort download</name>
+      <name>Abort Download</name>
       <description/>
       <type>ABORT</type>
-      <message/>
+      <message>Error while downloading data</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>624</xloc>
-      <yloc>352</yloc>
+      <xloc>784</xloc>
+      <yloc>256</yloc>
     </entry>
     <entry>
-      <name>Abort unzip</name>
+      <name>Abort Unzip</name>
       <description/>
       <type>ABORT</type>
-      <message/>
+      <message>Error while unzipping files</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>800</xloc>
-      <yloc>352</yloc>
+      <xloc>960</xloc>
+      <yloc>256</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -437,19 +436,19 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1024</xloc>
-      <yloc>224</yloc>
+      <xloc>1152</xloc>
+      <yloc>128</yloc>
     </entry>
     <entry>
-      <name>Abort create directory</name>
+      <name>Abort Create Directory</name>
       <description/>
       <type>ABORT</type>
       <message>Error while creating a new directory</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>256</xloc>
-      <yloc>352</yloc>
+      <xloc>416</xloc>
+      <yloc>256</yloc>
     </entry>
   </entries>
   <hops>
@@ -464,7 +463,7 @@
     </hop>
     <hop>
       <from>Create Import Directory</from>
-      <to>Check if directory is empty</to>
+      <to>Check If Directory Is Empty</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -472,8 +471,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Check if directory is empty</from>
-      <to>Delete files</to>
+      <from>Check If Directory Is Empty</from>
+      <to>Delete Files</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -481,8 +480,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Delete files</from>
-      <to>Abort delete files</to>
+      <from>Delete Files</from>
+      <to>Abort Delete Files</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -490,8 +489,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Check if directory is empty</from>
-      <to>wget addresses file</to>
+      <from>Check If Directory Is Empty</from>
+      <to>Download Addresses File</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -499,8 +498,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Delete files</from>
-      <to>wget addresses file</to>
+      <from>Delete Files</from>
+      <to>Download Addresses File</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -508,8 +507,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>wget addresses file</from>
-      <to>unzip addresses file</to>
+      <from>Download Addresses File</from>
+      <to>Unzip Addresses File</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -517,7 +516,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>unzip addresses file</from>
+      <from>Unzip Addresses File</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -526,8 +525,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>wget addresses file</from>
-      <to>Abort download</to>
+      <from>Download Addresses File</from>
+      <to>Abort Download</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -535,8 +534,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>unzip addresses file</from>
-      <to>Abort unzip</to>
+      <from>Unzip Addresses File</from>
+      <to>Abort Unzip</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -545,7 +544,7 @@
     </hop>
     <hop>
       <from>Create Import Directory</from>
-      <to>Abort create directory</to>
+      <to>Abort Create Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

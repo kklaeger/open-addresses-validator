@@ -543,13 +543,13 @@
   </connection>
   <order>
     <hop>
-      <from>Table input</from>
-      <to>Insert / Update</to>
+      <from>Select From Hive Table</from>
+      <to>Insert Into MySql Table</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Insert / Update</name>
+    <name>Insert Into MySql Table</name>
     <type>InsertUpdate</type>
     <description/>
     <distribute>Y</distribute>
@@ -618,16 +618,16 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
-      <yloc>320</yloc>
+      <xloc>704</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Table input</name>
+    <name>Select From Hive Table</name>
     <type>TableInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -636,7 +636,7 @@
     </partitioning>
     <connection>hive</connection>
     <sql>SELECT number, street, city, postcode FROM ADDRESSES</sql>
-    <limit>0</limit>
+    <limit>${ADDRESSES_EXPORT_LIMIT}</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
@@ -649,8 +649,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>320</yloc>
+      <xloc>480</xloc>
+      <yloc>272</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
