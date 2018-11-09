@@ -430,16 +430,6 @@
       <yloc>256</yloc>
     </entry>
     <entry>
-      <name>Success</name>
-      <description/>
-      <type>SUCCESS</type>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1152</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
       <name>Abort Create Directory</name>
       <description/>
       <type>ABORT</type>
@@ -449,6 +439,52 @@
       <nr>0</nr>
       <xloc>416</xloc>
       <yloc>256</yloc>
+    </entry>
+    <entry>
+      <name>Remove Unused Files</name>
+      <description/>
+      <type>SHELL</type>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>rm -R  -f ${ADDRESSES_DOWNLOAD_DIR}/summary
+find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
+</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1136</xloc>
+      <yloc>128</yloc>
+    </entry>
+    <entry>
+      <name>Abort Remove Files</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Could not cremove files</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1136</xloc>
+      <yloc>256</yloc>
+    </entry>
+    <entry>
+      <name>Success</name>
+      <description/>
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1296</xloc>
+      <yloc>128</yloc>
     </entry>
   </entries>
   <hops>
@@ -516,15 +552,6 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Unzip Addresses File</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Download Addresses File</from>
       <to>Abort Download</to>
       <from_nr>0</from_nr>
@@ -545,6 +572,33 @@
     <hop>
       <from>Create Import Directory</from>
       <to>Abort Create Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Unzip Addresses File</from>
+      <to>Remove Unused Files</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Remove Unused Files</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Remove Unused Files</from>
+      <to>Abort Remove Files</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
