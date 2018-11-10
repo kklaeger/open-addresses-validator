@@ -635,7 +635,7 @@
       <schema_name/>
     </partitioning>
     <connection>hive</connection>
-    <sql>SELECT streetNumber, street, city, postcode FROM ADDRESSES</sql>
+    <sql>SELECT streetNumber, street, city, postcode FROM addresses_final</sql>
     <limit>${ADDRESSES_EXPORT_LIMIT}</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
