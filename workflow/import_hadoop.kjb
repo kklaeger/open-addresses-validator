@@ -354,9 +354,6 @@
       <insertScript>Y</insertScript>
       <script>#!/bin/bash
 
-cd /home/hadoop/openaddresses/
-for dir in * ; do mv "$dir" "country=$dir"; done
-
 hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
@@ -453,7 +450,7 @@ MSCK REPAIR TABLE addresses;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
+      <xloc>128</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -497,7 +494,7 @@ MSCK REPAIR TABLE addresses;</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1280</xloc>
+      <xloc>1312</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -509,6 +506,55 @@ MSCK REPAIR TABLE addresses;</sql>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>1136</xloc>
+      <yloc>320</yloc>
+    </entry>
+    <entry>
+      <name>Prepair Download Directory</name>
+      <description/>
+      <type>SHELL</type>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>#!/bin/bash
+
+cd ${ADDRESSES_DOWNLOAD_DIR} 
+
+# Move all .csv files in the root directory of the country and rename directory to "country=country_name"
+
+for country_dir in * ; do 
+    for country_sub_dir in $country_dir/* ; do 
+        for file in $country_sub_dir/* ; do
+            if [ -f $file ]; then
+                mv "$file" "$country_dir"; 
+            fi
+        done
+    done
+    mv "$country_dir" "country=$country_dir";
+done</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>192</yloc>
+    </entry>
+    <entry>
+      <name>Abort Prepair Download Directory</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Cannot prepair download directory successfully</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
       <yloc>320</yloc>
     </entry>
   </entries>
@@ -550,15 +596,6 @@ MSCK REPAIR TABLE addresses;</sql>
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>START</from>
-      <to>Create Hadoop Directory</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
       <from>Add Partitions To Hive Table</from>
       <to>Abort Add Partitions</to>
       <from_nr>0</from_nr>
@@ -588,6 +625,33 @@ MSCK REPAIR TABLE addresses;</sql>
     <hop>
       <from>Clean Download Directory</from>
       <to>Abort Clean Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>Prepair Download Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Prepair Download Directory</from>
+      <to>Create Hadoop Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Prepair Download Directory</from>
+      <to>Abort Prepair Download Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
