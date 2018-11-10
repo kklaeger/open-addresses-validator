@@ -572,8 +572,8 @@
         <name2/>
       </key>
       <key>
-        <name>number</name>
-        <field>number</field>
+        <name>streetNumber</name>
+        <field>streetNumber</field>
         <condition>=</condition>
         <name2/>
       </key>
@@ -595,8 +595,8 @@
         <update>Y</update>
       </value>
       <value>
-        <name>number</name>
-        <rename>number</rename>
+        <name>streetNumber</name>
+        <rename>streetNumber</rename>
         <update>Y</update>
       </value>
       <value>
@@ -635,7 +635,7 @@
       <schema_name/>
     </partitioning>
     <connection>hive</connection>
-    <sql>SELECT number, street, city, postcode FROM ADDRESSES</sql>
+    <sql>SELECT streetNumber, street, city, postcode FROM ADDRESSES</sql>
     <limit>${ADDRESSES_EXPORT_LIMIT}</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
