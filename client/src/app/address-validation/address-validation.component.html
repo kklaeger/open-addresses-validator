@@ -39,10 +39,10 @@
         <button (click)="validateAddress(address)">Check Address!</button>
     </div>
     <div *ngIf="showSuccessMessage" class="message-element">
-        <span><span class="fa fa-check" style="font-size:35px;color:green"></span>  Address does exist!</span>
+        <span><span class="fa fa-check" style="font-size:35px;color:green"></span>  Address is valid!</span>
     </div>
     <div *ngIf="showFailMessage" class="message-element">
-        <span><span class="fa fa-close" style="font-size:35px;color:red"></span>  Address does not exist!</span>
+        <span><span class="fa fa-close" style="font-size:35px;color:red"></span>  Address is invalid!</span>
     </div>
 </div>
 

@@ -13,11 +13,11 @@ export class AddressController{
         if (postcode !== "" && city !== "") {
             sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city = ? AND postcode = ?";
         } else if (postcode == "" && city !== "") {
-            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city = ? AND postcode IS NULL";
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city = ?";
         } else if (postcode !== "" && city == "") {
-            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city IS NULL AND postcode = ?";
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND postcode = ?";
         } else {
-            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city IS NULL AND postcode IS NULL";
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? ";
         }
         
         db.query(sql, [street, streetNumber, city, postcode], (err, result) => {
