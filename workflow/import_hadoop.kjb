@@ -369,13 +369,13 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <sql>CREATE EXTERNAL TABLE IF NOT EXISTS addresses(
 lon DOUBLE,
 lat DOUBLE,
-number STRING,
+streetNumber STRING,
 street STRING,
 unit STRING,
 city STRING,
 district STRING,
 region STRING,
-postcode INT,
+postcode STRING,
 id STRING,
 hash STRING) 
 PARTITIONED BY (country STRING)
