@@ -16,7 +16,6 @@ export class AddressValidationComponent implements OnInit {
   private showFailMessage: Boolean;
   private streetValueIsSet: Boolean;
   private numberValueIsSet: Boolean;
-  private cityValueIsSet: Boolean;
 
   constructor(private addressService: AddressService) { }
 
@@ -52,16 +51,12 @@ export class AddressValidationComponent implements OnInit {
     if (address.streetNumber == null || address.streetNumber === '') {
       this.numberValueIsSet = false;
     }
-    if (address.city == null || address.city === '') {
-      this.cityValueIsSet = false;
-    }
-    return this.streetValueIsSet && this.numberValueIsSet && this.cityValueIsSet;
+    return this.streetValueIsSet && this.numberValueIsSet;
   }
 
   resetMessages(): void {
     this.streetValueIsSet = true;
     this.numberValueIsSet = true;
-    this.cityValueIsSet = true;
     this.showSuccessMessage = false;
     this.showFailMessage = false;
   }
