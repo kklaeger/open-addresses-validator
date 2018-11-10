@@ -21,11 +21,10 @@ export class AddressValidationComponent implements OnInit {
 
   ngOnInit(): void {
     this.address = {
-      id: -1,
       street: '',
       streetNumber: '',
       city: '',
-      postcode: null
+      postcode: ''
     };
     this.resetMessages();
   }
