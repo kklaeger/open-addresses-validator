@@ -446,7 +446,8 @@ MSCK REPAIR TABLE addresses_raw;
       <name>Transfer From Raw To Final</name>
       <description/>
       <type>SQL</type>
-      <sql>SET hive.exec.max.dynamic.partitions=1000;
+      <sql>set hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.max.dynamic.partitions=1000;
 SET hive.exec.max.dynamic.partitions.pernode=100000; 
 insert overwrite table addresses_final partition(country)
 SELECT streetNumber, street, city, postcode, country FROM addresses_raw;
@@ -476,7 +477,7 @@ city STRING,
 postcode STRING) 
 PARTITIONED BY (country STRING)
 STORED AS ORC
-LOCATION 'hdfs://localhost:9000${ADDRESSES_HADOOP_DIR}/final'
+LOCATION 'hdfs://localhost:9000/${ADDRESSES_HADOOP_DIR}/final'
 TBLPROPERTIES ('transactional'='true');
 
 
