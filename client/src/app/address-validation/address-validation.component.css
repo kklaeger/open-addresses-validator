@@ -84,4 +84,10 @@ button:hover {
 .label {
     padding: 0 5px;
     float:left; 
+    font-size: 13pt;
+}
+
+.optional {
+    font-size: 9pt;
+    margin: 5px 5px;
 }

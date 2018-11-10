@@ -8,13 +8,16 @@ export class AddressController{
         const street = req.body.street.trim();
         const streetNumber = req.body.streetNumber.trim();
         const city = req.body.city.trim();
-        let postcode = req.body.postcode;
+        const postcode = req.body.postcode.trim();
         let sql; 
-        if (postcode && postcode !== "") {
-            sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode = ?";
-            postcode = postcode.trim();
+        if (postcode !== "" && city !== "") {
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city = ? AND postcode = ?";
+        } else if (postcode == "" && city !== "") {
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city = ? AND postcode IS NULL";
+        } else if (postcode !== "" && city == "") {
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city IS NULL AND postcode = ?";
         } else {
-            sql = "SELECT * FROM addresses WHERE street = ? AND number = ? AND city = ? AND postcode IS NULL";
+            sql = "SELECT * FROM addresses WHERE street = ? AND streetNumber = ? AND city IS NULL AND postcode IS NULL";
         }
         
         db.query(sql, [street, streetNumber, city, postcode], (err, result) => {
