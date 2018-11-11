@@ -1,16 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>download</name>
+  <name>optimize_addresses</name>
   <description/>
   <extended_description/>
   <job_version/>
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
-  <created_date>2018/11/05 16:47:34.257</created_date>
+  <created_date>2018/11/10 13:44:48.599</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2018/11/05 16:47:34.257</modified_date>
+  <modified_date>2018/11/10 13:44:48.599</modified_date>
   <parameters>
     </parameters>
+  <connection>
+    <name>hive</name>
+    <server>localhost</server>
+    <type>HIVE2</type>
+    <access>Native</access>
+    <database>default</database>
+    <port>10000</port>
+    <username>hadoop</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79a671da9da0ca</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>10000</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
   <slaveservers>
     </slaveservers>
   <job-log-table>
@@ -287,6 +339,81 @@
   <shared_objects_file/>
   <entries>
     <entry>
+      <name>Create Raw Hive Table</name>
+      <description/>
+      <type>SQL</type>
+      <sql>CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
+	lon DOUBLE,
+	lat DOUBLE,
+	streetNumber STRING,
+	street STRING,
+	unit STRING,
+	city STRING,
+	district STRING,
+	region STRING,
+	postcode STRING,
+	id STRING,
+	hash STRING) 
+PARTITIONED BY (country STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
+
+
+
+
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>272</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Abort Create Raw Hive Table</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Could not create raw Hive table</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>272</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Add Partitions To Raw Hive Table</name>
+      <description/>
+      <type>SQL</type>
+      <sql>SET hive.msck.path.validation=ignore;
+MSCK REPAIR TABLE addresses_raw;
+</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>480</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Abort Add Partitions</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Cannot add partitions to Hive table</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>480</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
       <name>START</name>
       <description/>
       <type>SPECIAL</type>
@@ -303,180 +430,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Create Import Directory</name>
-      <description/>
-      <type>CREATE_FOLDER</type>
-      <foldername>${ADDRESSES_DOWNLOAD_DIR}</foldername>
-      <fail_of_folder_exists>N</fail_of_folder_exists>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>416</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Check If Directory Is Empty</name>
-      <description/>
-      <type>FOLDER_IS_EMPTY</type>
-      <foldername>${ADDRESSES_DOWNLOAD_DIR}</foldername>
-      <include_subfolders>N</include_subfolders>
-      <specify_wildcard>N</specify_wildcard>
-      <wildcard/>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Delete Files</name>
-      <description/>
-      <type>DELETE_FILES</type>
-      <arg_from_previous>N</arg_from_previous>
-      <include_subfolders>Y</include_subfolders>
-      <fields>
-        <field>
-          <name>${ADDRESSES_DOWNLOAD_DIR}</name>
-          <filemask/>
-        </field>
-      </fields>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>256</yloc>
-    </entry>
-    <entry>
-      <name>Abort Delete Files</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Error while deleting files</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>400</yloc>
-    </entry>
-    <entry>
-      <name>Download Addresses File</name>
-      <description/>
-      <type>SHELL</type>
-      <filename/>
-      <work_directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script>wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip ${ADDRESSES_DOWNLOAD_URL}
-wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip ${ADDRESSES_DOWNLOAD_URL2}</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Unzip Addresses File</name>
-      <description/>
-      <type>SHELL</type>
-      <filename/>
-      <work_directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script>unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip -d ${ADDRESSES_DOWNLOAD_DIR}
-unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>960</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Abort Download</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Error while downloading data</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>256</yloc>
-    </entry>
-    <entry>
-      <name>Abort Unzip</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Error while unzipping files</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>960</xloc>
-      <yloc>256</yloc>
-    </entry>
-    <entry>
-      <name>Abort Create Directory</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Error while creating a new directory</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>416</xloc>
-      <yloc>256</yloc>
-    </entry>
-    <entry>
-      <name>Remove Unused Files</name>
-      <description/>
-      <type>SHELL</type>
-      <filename/>
-      <work_directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script>rm -R  -f ${ADDRESSES_DOWNLOAD_DIR}/summary
-find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
-</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1136</xloc>
-      <yloc>128</yloc>
-    </entry>
-    <entry>
-      <name>Abort Remove Files</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Could not cremove files</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1136</xloc>
-      <yloc>256</yloc>
+      <xloc>80</xloc>
+      <yloc>160</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -485,14 +440,114 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1296</xloc>
-      <yloc>128</yloc>
+      <xloc>1280</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Transfer From Raw To Final</name>
+      <description/>
+      <type>SQL</type>
+      <sql>SET hive.exec.dynamic.partition.mode=nonstrict;
+SET hive.exec.max.dynamic.partitions=1000;
+SET hive.exec.max.dynamic.partitions.pernode=100000; 
+INSERT overwrite TABLE addresses_final partition(country)
+SELECT streetNumber, street, city, postcode, country FROM addresses_raw;
+
+
+
+</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>880</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Create Final Hive Table</name>
+      <description/>
+      <type>SQL</type>
+      <sql>CREATE TABLE IF NOT EXISTS addresses_final(
+	streetNumber STRING,
+	street STRING,
+	city STRING,
+	postcode STRING) 
+PARTITIONED BY (country STRING)
+STORED AS ORC
+LOCATION 'hdfs://localhost:9000/${ADDRESSES_HADOOP_DIR}/final'
+TBLPROPERTIES ('transactional'='true');
+
+
+</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>688</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Abort Create Final Hive Table </name>
+      <description/>
+      <type>ABORT</type>
+      <message>Could not create final Hive table</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>688</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Abort Transfer To Final</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Could not transfer raw data to final table</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>880</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Delete Unnecessary Rows</name>
+      <description/>
+      <type>SQL</type>
+      <sql>DELETE FROM addresses_final WHERE streetNumber="NUMBER" AND street="STREET" AND city="CITY" AND postcode="POSTCODE";</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1072</xloc>
+      <yloc>160</yloc>
+    </entry>
+    <entry>
+      <name>Abort Delete Rows</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Could not delete unnecessary rows</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1072</xloc>
+      <yloc>288</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
       <from>START</from>
-      <to>Create Import Directory</to>
+      <to>Create Raw Hive Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -500,17 +555,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Create Import Directory</from>
-      <to>Check If Directory Is Empty</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Check If Directory Is Empty</from>
-      <to>Delete Files</to>
+      <from>Create Raw Hive Table</from>
+      <to>Abort Create Raw Hive Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -518,8 +564,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Delete Files</from>
-      <to>Abort Delete Files</to>
+      <from>Add Partitions To Raw Hive Table</from>
+      <to>Abort Add Partitions</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -527,8 +573,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Check If Directory Is Empty</from>
-      <to>Download Addresses File</to>
+      <from>Create Raw Hive Table</from>
+      <to>Add Partitions To Raw Hive Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -536,8 +582,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Delete Files</from>
-      <to>Download Addresses File</to>
+      <from>Add Partitions To Raw Hive Table</from>
+      <to>Create Final Hive Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -545,17 +591,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Download Addresses File</from>
-      <to>Unzip Addresses File</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Download Addresses File</from>
-      <to>Abort Download</to>
+      <from>Create Final Hive Table</from>
+      <to>Abort Create Final Hive Table </to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -563,8 +600,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Unzip Addresses File</from>
-      <to>Abort Unzip</to>
+      <from>Transfer From Raw To Final</from>
+      <to>Abort Transfer To Final</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -572,17 +609,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Create Import Directory</from>
-      <to>Abort Create Directory</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Unzip Addresses File</from>
-      <to>Remove Unused Files</to>
+      <from>Create Final Hive Table</from>
+      <to>Transfer From Raw To Final</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -590,7 +618,16 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Remove Unused Files</from>
+      <from>Transfer From Raw To Final</from>
+      <to>Delete Unnecessary Rows</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Unnecessary Rows</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -599,8 +636,8 @@ find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Remove Unused Files</from>
-      <to>Abort Remove Files</to>
+      <from>Delete Unnecessary Rows</from>
+      <to>Abort Delete Rows</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

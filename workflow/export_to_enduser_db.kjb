@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>export_to_mysql</name>
+  <name>export_to_enduser_db</name>
   <description/>
   <extended_description/>
   <job_version/>
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
   <created_date>2018/11/08 11:52:31.928</created_date>
@@ -367,7 +368,7 @@
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/export.ktr</filename>
+      <filename>${Internal.Entry.Current.Directory}/export_to_mysql.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -412,10 +413,10 @@
       <description/>
       <type>SQL</type>
       <sql>CREATE TABLE IF NOT EXISTS addresses (
-    streetNumber varchar(255),
-    street varchar(255),
-    city varchar(255),
-    postcode varchar(255)
+    streetNumber VARCHAR(255),
+    street VARCHAR(255),
+    city VARCHAR(255),
+    postcode VARCHAR(255)
 );</sql>
       <useVariableSubstitution>F</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>

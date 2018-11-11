@@ -303,8 +303,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>304</xloc>
-      <yloc>176</yloc>
+      <xloc>160</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -313,16 +313,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1232</xloc>
-      <yloc>176</yloc>
+      <xloc>1200</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
-      <name>Download Data</name>
+      <name>Download Addresses</name>
       <description/>
       <type>JOB</type>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/download.kjb</filename>
+      <filename>${Internal.Entry.Current.Directory}/download_addresses.kjb</filename>
       <jobname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -347,16 +347,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>480</xloc>
-      <yloc>176</yloc>
+      <xloc>352</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
-      <name>Copy Data To Hadoop</name>
+      <name>Copy Addresses To HDFS</name>
       <description/>
       <type>JOB</type>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/import_hadoop.kjb</filename>
+      <filename>${Internal.Entry.Current.Directory}/import_to_hdfs.kjb</filename>
       <jobname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -381,8 +381,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>656</xloc>
-      <yloc>176</yloc>
+      <xloc>560</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
       <name>Abort Workflow</name>
@@ -392,16 +392,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>352</yloc>
+      <xloc>688</xloc>
+      <yloc>320</yloc>
     </entry>
     <entry>
-      <name>Export Data To MySql</name>
+      <name>Export Addresses To Enduser Database</name>
       <description/>
       <type>JOB</type>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/export_to_mysql.kjb</filename>
+      <filename>${Internal.Entry.Current.Directory}/export_to_enduser_db.kjb</filename>
       <jobname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -426,16 +426,16 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1056</xloc>
-      <yloc>176</yloc>
+      <xloc>1008</xloc>
+      <yloc>144</yloc>
     </entry>
     <entry>
-      <name>Optimizing</name>
+      <name>Optimize Addresses</name>
       <description/>
       <type>JOB</type>
       <specification_method>filename</specification_method>
       <job_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/optimizing.kjb</filename>
+      <filename>${Internal.Entry.Current.Directory}/optimize_addresses.kjb</filename>
       <jobname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -460,14 +460,14 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>864</xloc>
-      <yloc>176</yloc>
+      <xloc>784</xloc>
+      <yloc>144</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
       <from>START</from>
-      <to>Download Data</to>
+      <to>Download Addresses</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -475,8 +475,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Download Data</from>
-      <to>Copy Data To Hadoop</to>
+      <from>Download Addresses</from>
+      <to>Copy Addresses To HDFS</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -484,7 +484,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Download Data</from>
+      <from>Download Addresses</from>
       <to>Abort Workflow</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -493,7 +493,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Copy Data To Hadoop</from>
+      <from>Copy Addresses To HDFS</from>
       <to>Abort Workflow</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -502,7 +502,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Export Data To MySql</from>
+      <from>Export Addresses To Enduser Database</from>
       <to>Abort Workflow</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -511,7 +511,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Export Data To MySql</from>
+      <from>Export Addresses To Enduser Database</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -520,8 +520,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Copy Data To Hadoop</from>
-      <to>Optimizing</to>
+      <from>Copy Addresses To HDFS</from>
+      <to>Optimize Addresses</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -529,8 +529,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Optimizing</from>
-      <to>Export Data To MySql</to>
+      <from>Optimize Addresses</from>
+      <to>Export Addresses To Enduser Database</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -538,7 +538,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Optimizing</from>
+      <from>Optimize Addresses</from>
       <to>Abort Workflow</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>

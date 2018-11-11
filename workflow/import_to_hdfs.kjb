@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job>
-  <name>import_hadoop</name>
+  <name>import_to_hdfs</name>
   <description/>
   <extended_description/>
   <job_version/>
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
   <created_date>2018/11/07 12:19:43.964</created_date>
@@ -287,7 +288,7 @@
   <shared_objects_file/>
   <entries>
     <entry>
-      <name>Import Data To Hadoop Directory</name>
+      <name>Import Data To HDFS Directory</name>
       <description/>
       <type>SHELL</type>
       <filename/>
@@ -301,9 +302,9 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>#!/bin/bash
-hadoop fs -mkdir ${ADDRESSES_HADOOP_DIR}
+      <script># The root directory is created and the prepared directory is imported
 
+hadoop fs -mkdir -p ${ADDRESSES_HADOOP_DIR}
 hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
@@ -313,10 +314,10 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Abort Create Hadoop Directory</name>
+      <name>Abort Create HDFS Directory</name>
       <description/>
       <type>ABORT</type>
-      <message>Could not create Hadoop directory</message>
+      <message>Could not create HDFS directory</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -358,7 +359,9 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>rm -rf ${ADDRESSES_DOWNLOAD_DIR}/*</script>
+      <script># Delete all files in the download directory
+
+rm -rf ${ADDRESSES_DOWNLOAD_DIR}/*</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
@@ -402,11 +405,15 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>#!/bin/bash
+      <script># For the further steps only the .csv files are required. Therefore, other files in this directory are deleted. 
+# Moreover, the summary directory that is downloaded in some cases is deleted.
+
+rm -R  -f ${ADDRESSES_DOWNLOAD_DIR}/summary
+find ${ADDRESSES_DOWNLOAD_DIR} -type f -not -name '*.csv'  -delete
 
 cd ${ADDRESSES_DOWNLOAD_DIR} 
 
-# Move all .csv files in the root directory of the country and rename directory to "country=country_name"
+# Move all .csv files in the root directory of the country and rename directory to "country=country_name" to get a pre-partitionated directory
 
 for country_dir in * ; do 
     for country_sub_dir in $country_dir/* ; do 
@@ -440,8 +447,8 @@ done</script>
   </entries>
   <hops>
     <hop>
-      <from>Import Data To Hadoop Directory</from>
-      <to>Abort Create Hadoop Directory</to>
+      <from>Import Data To HDFS Directory</from>
+      <to>Abort Create HDFS Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -477,7 +484,7 @@ done</script>
     </hop>
     <hop>
       <from>Prepair Download Directory</from>
-      <to>Import Data To Hadoop Directory</to>
+      <to>Import Data To HDFS Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -494,7 +501,7 @@ done</script>
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Import Data To Hadoop Directory</from>
+      <from>Import Data To HDFS Directory</from>
       <to>Clean Download Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
