@@ -448,10 +448,9 @@ MSCK REPAIR TABLE addresses_raw;
       <description/>
       <type>SQL</type>
       <sql>SET hive.exec.dynamic.partition.mode=nonstrict;
-SET hive.exec.max.dynamic.partitions=1000;
-SET hive.exec.max.dynamic.partitions.pernode=100000; 
+
 INSERT overwrite TABLE addresses_final partition(country)
-SELECT streetNumber, street, city, postcode, country FROM addresses_raw;
+SELECT streetNumber, street, city, postcode, country FROM addresses_raw
 
 
 
@@ -472,13 +471,13 @@ SELECT streetNumber, street, city, postcode, country FROM addresses_raw;
       <description/>
       <type>SQL</type>
       <sql>CREATE TABLE IF NOT EXISTS addresses_final(
-	streetNumber STRING,
-	street STRING,
-	city STRING,
-	postcode STRING) 
+streetNumber STRING,
+street STRING,
+city STRING,
+postcode STRING) 
 PARTITIONED BY (country STRING)
 STORED AS ORC
-LOCATION 'hdfs://localhost:9000/${ADDRESSES_HADOOP_DIR}/final'
+LOCATION 'hdfs://localhost:9000/user/hadoop/openaddresses/final'
 TBLPROPERTIES ('transactional'='true');
 
 
