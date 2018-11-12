@@ -1,0 +1,100 @@
+%% Layout
+\documentclass[
+	a4paper,
+	12p,
+	bibliography=totocnumbered
+]{scrartcl} 	
+
+
+%% Usepackages
+\usepackage[T1]{fontenc}					% Schriftkodierung
+\usepackage{mathptmx}						% Times Schrift
+\usepackage[scaled=0.95]{helvet}			% Helvetica, Skalierung ggf. anspassen
+\usepackage[utf8]{inputenc}					% Umlaute, etc.
+\usepackage[ngerman]{babel}					% Sprachen
+\usepackage{paralist}						% Ermöglicht Aufzählungen
+\usepackage{graphicx}						% Einbinden von Grafiken
+\usepackage{xcolor}							% Ermöglicht farbige Schrift
+\usepackage{caption}						% Paket zur Anpassung von Titeln von Gleitobjekten 
+\usepackage{tabularx}						% Ermöglicht das Erstellen von Tabellen
+\usepackage{acronym}						% Ermöglicht die Verwendung von Akronymen	
+\usepackage{hyperref}	
+
+
+%% Configuration of the document
+\usepackage{geometry}
+\geometry{a4paper,left=25mm,right=25mm, top=30mm, bottom=30mm} 
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+\setlength{\parindent}{0pt}
+\usepackage[onehalfspacing]{setspace}
+
+%% Header
+\usepackage{fancyhdr}	
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Konstantin Kläger}
+\chead{Open Addresses Validator}
+\rhead{\today}
+
+\cfoot{\thepage}
+
+
+\setlength{\parindent}{0pt}
+
+
+\begin{document}
+
+
+\section{Aufbau des Projekts}
+
+Das Projekt besteht grundlegend aus einem Workflow welcher für den Download und die Verarbeitung der Adressen zuständig ist, einer Weboberfläche zum Abfragen von Adressen und einem Backend welches die Anfragen überprüft. Im Folgenden werden die einzelnen Teile genauer erläutert.
+
+\section{Workflow}
+
+
+Der Ablauf setzt sich aus vier Schritten zusammen. Zunächst werden die Adressen von \url{http://results.openaddresses.io/} heruntergeladen, entpackt und unnötige Dateien entfernt. Anschließend werden die Daten in das HDFS kopiert wo unnötige Zeilen und Spalten entfernt werden. Schließlich werden die Daten in eine End-User-Datenbank kopiert, von wo aus sie durch eine separate Anwendung verwendet werden können.
+
+\subsection{Main}
+
+Der gesamte Workflow wird in einem main-Job verwaltet. Dieser Job enthält die einzelnen Schritte vom Download der Datei bis zum Export der Daten in eine End-User-Datenbank.
+
+\subsection{Download Addresses}
+
+Im ersten Job wird zunächst das Download-Verzeichnis \texttt{openaddresses} erstellt, welches wiederum ein Verzeichnis \texttt{raw} enthält. Für diese Verzeichnisse wird überprüft ob noch Dateien enthalten sind, welche ggf. gelöscht werden. Anschließend wird die Adressdatei herunter geladen und schließlich entpackt, sodass sich im Verzeichnis \texttt{raw} die einzelnen Verzeichnisse der jeweiligen Länder befinden.
+
+
+\subsection{Copy Addresses to HDFS}
+
+Bevor die Dateien in das HDFS kopiert werden, werden zunächst einige Vorbereitungen getroffen. Das in der Download-Datei enthaltene \texttt{Summary} Verzeichnis, sowie alle \glqq nicht-\texttt{.csv}-Dateien \grqq{}, werden gelöscht, da diese im weiteren Verlauf nicht benötigt werden. Da die Verzeichnisse der jeweiligen Länder Unterverzeichnisse enthalten können, werden außerdem alle Dateien aus den Unterverzeichnissen in das Root-Verzeichnis des jeweiligen Landes kopiert. Schließlich wird jedes Verzeichnis in \texttt{country=\textit{Länderkürzel}} umbenannt, damit später im HDFS leicht partitioniert werden kann. (Bild mit vorher nachher???)\\
+
+Anschließend wird im HDFS das Root-Verzeichnis erstellt und das Download-Verzeichnis dort hin kopiert. Schließlich wird noch Download-Verzeichnis  geleert, da dieses von hier an nicht mehr benötigt wird.\\
+
+Anschließend wird zunächst eine externe Tabelle in Hive angelegt. Diese erhält als Location den Ort, an dem das \texttt{raw}-Verzeichnis im HDFS gespeichert wurde. Des Weiteren wird diese Tabelle nach \texttt{country} partitioniert. Da durch die Struktur des Verzeichnis die Daten schon vor partitioniert sind, muss Hive nurnoch mitgeteilt werden, dass diese Verzeichnisse als Partitionen verwendet werden sollen. Dies kann einfach über den Befehl \texttt{MSCK REPAIR TABLE addresses} erreicht werden.
+
+
+\subsection{Optimize Addresses}
+
+Im nächsten Job sollen die Adressen optimiert werden. Dazu wird zunächst eine interne Hive Tabelle erstellt, welche die finalen Daten enthalten soll. Dazu werden nur die, für den weiteren Verlauf benötigten, Attribute ausgewählt. Diese sind Straße, Hausnummer, Stadt und Postleitzahl. Des Weiteren wird diese Tabelle wieder nach \texttt{country} partitioniert.\\
+
+Anschließend werden die finalen Daten aus der \texttt{raw} Tabelle in die \texttt{final} Tabelle kopiert. Dazu müssen zunächst der Partitionierungsmodus und die Anzahl an möglichen Partitionen angepasst werden.\\
+
+Da die \texttt{.csv}-Dateien als Header die Spaltennamen besitzen, müssen diese manuell entfernt werden. Dazu werden im letzten Schritt dieses Jobs alle Zeilen entfernt, deren Einträge city=\glqq CITY\grqq{}, postcode=\glqq POSTCODE\grqq{}, usw. besitzen.
+
+	
+\subsection{Export Addresses To Enduser Database}
+
+Im letzten Job werden die Adressen in eine End-User-Datenbank kopiert. Dazu wird zunächst eine MySQL Tabelle erstellt, die alle nötigen Attribute besitzt. Anschließend wird selektiert eine Transformation die Daten aus der Hive Tabelle und kopiert sie in die finale MySQL Tabelle.
+
+
+\section{Client}
+
+Um zu überprüfen, ob eine Adresse existiert oder nicht, wird eine einfache, auf Angular 6 basierende Weboberfläche zur Verfügung gestellt. Diese stellt je ein Feld für Straße, Hausnummer, Stadt und Postleitzahl  bereit. Da in manchen Fällen für bestimmte Länder oder Städte keine Postleitzahl und/oder Stadt vorhanden ist, sind Straße und Hausnummer Pflichtfelder und Stadt und Postleitzahl nur optional. Wird eine Adresse eingegeben, wird der Benutzer über eine einfache Ausgabe benachrichtigt, ob die Adresse gültig ist oder nicht.
+
+\section{Server}
+
+Die Daten die Vom Benutzer in die Felder der Weboberfläche eingegeben werden, werden an die REST-API einer auf Node.js basierenden Backend-Anwendung gesendet. Diese überprüft, ob sich die eingegeben Adresse in der Datenbank befindet oder nicht und antwortet dementsprechend mit \texttt{true} oder \texttt{false}.
+
+
+\end{document}

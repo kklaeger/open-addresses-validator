@@ -39,3 +39,12 @@ package-lock.json
 # System Files
 .DS_Store
 Thumbs.db
+
+# LaTex files
+*.aux
+*.gz
+*.synctex.gz
+*.out
+*.log
+*.dvi
+
