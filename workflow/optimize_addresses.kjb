@@ -339,81 +339,6 @@
   <shared_objects_file/>
   <entries>
     <entry>
-      <name>Create Raw Hive Table</name>
-      <description/>
-      <type>SQL</type>
-      <sql>CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
-	lon DOUBLE,
-	lat DOUBLE,
-	streetNumber STRING,
-	street STRING,
-	unit STRING,
-	city STRING,
-	district STRING,
-	region STRING,
-	postcode STRING,
-	id STRING,
-	hash STRING) 
-PARTITIONED BY (country STRING)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
-
-
-
-
-</sql>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>hive</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>272</xloc>
-      <yloc>160</yloc>
-    </entry>
-    <entry>
-      <name>Abort Create Raw Hive Table</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Could not create raw Hive table</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>272</xloc>
-      <yloc>288</yloc>
-    </entry>
-    <entry>
-      <name>Add Partitions To Raw Hive Table</name>
-      <description/>
-      <type>SQL</type>
-      <sql>SET hive.msck.path.validation=ignore;
-MSCK REPAIR TABLE addresses_raw;
-</sql>
-      <useVariableSubstitution>F</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>hive</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>480</xloc>
-      <yloc>160</yloc>
-    </entry>
-    <entry>
-      <name>Abort Add Partitions</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Cannot add partitions to Hive table</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>480</xloc>
-      <yloc>288</yloc>
-    </entry>
-    <entry>
       <name>START</name>
       <description/>
       <type>SPECIAL</type>
@@ -430,7 +355,7 @@ MSCK REPAIR TABLE addresses_raw;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
+      <xloc>272</xloc>
       <yloc>160</yloc>
     </entry>
     <entry>
@@ -440,16 +365,14 @@ MSCK REPAIR TABLE addresses_raw;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1280</xloc>
+      <xloc>1072</xloc>
       <yloc>160</yloc>
     </entry>
     <entry>
-      <name>Transfer From Raw To Final</name>
+      <name>Insert To Final Table</name>
       <description/>
       <type>SQL</type>
-      <sql>SET hive.exec.dynamic.partition.mode=nonstrict;
-
-INSERT overwrite TABLE addresses_final partition(country)
+      <sql>INSERT overwrite TABLE addresses_final partition(country)
 SELECT streetNumber, street, city, postcode, country FROM addresses_raw
 
 
@@ -463,7 +386,7 @@ SELECT streetNumber, street, city, postcode, country FROM addresses_raw
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>880</xloc>
+      <xloc>672</xloc>
       <yloc>160</yloc>
     </entry>
     <entry>
@@ -471,10 +394,10 @@ SELECT streetNumber, street, city, postcode, country FROM addresses_raw
       <description/>
       <type>SQL</type>
       <sql>CREATE TABLE IF NOT EXISTS addresses_final(
-streetNumber STRING,
-street STRING,
-city STRING,
-postcode STRING) 
+	streetNumber STRING,
+	street STRING,
+	city STRING,
+	postcode STRING) 
 PARTITIONED BY (country STRING)
 STORED AS ORC
 LOCATION 'hdfs://localhost:9000/user/hadoop/openaddresses/final'
@@ -490,29 +413,29 @@ TBLPROPERTIES ('transactional'='true');
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>688</xloc>
+      <xloc>480</xloc>
       <yloc>160</yloc>
     </entry>
     <entry>
-      <name>Abort Create Final Hive Table </name>
+      <name>Create Hive Table Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Could not create final Hive table</message>
+      <message>Create Hive Table Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>688</xloc>
+      <xloc>480</xloc>
       <yloc>288</yloc>
     </entry>
     <entry>
-      <name>Abort Transfer To Final</name>
+      <name>Insert Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Could not transfer raw data to final table</message>
+      <message>Insert Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>880</xloc>
+      <xloc>672</xloc>
       <yloc>288</yloc>
     </entry>
     <entry>
@@ -528,70 +451,25 @@ TBLPROPERTIES ('transactional'='true');
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1072</xloc>
+      <xloc>864</xloc>
       <yloc>160</yloc>
     </entry>
     <entry>
-      <name>Abort Delete Rows</name>
+      <name>Delete Rows Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Could not delete unnecessary rows</message>
+      <message>Delete Rows Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1072</xloc>
+      <xloc>864</xloc>
       <yloc>288</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
-      <from>START</from>
-      <to>Create Raw Hive Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>Create Raw Hive Table</from>
-      <to>Abort Create Raw Hive Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Add Partitions To Raw Hive Table</from>
-      <to>Abort Add Partitions</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Create Raw Hive Table</from>
-      <to>Add Partitions To Raw Hive Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Add Partitions To Raw Hive Table</from>
-      <to>Create Final Hive Table</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Create Final Hive Table</from>
-      <to>Abort Create Final Hive Table </to>
+      <to>Create Hive Table Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -599,8 +477,8 @@ TBLPROPERTIES ('transactional'='true');
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Transfer From Raw To Final</from>
-      <to>Abort Transfer To Final</to>
+      <from>Insert To Final Table</from>
+      <to>Insert Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -609,7 +487,7 @@ TBLPROPERTIES ('transactional'='true');
     </hop>
     <hop>
       <from>Create Final Hive Table</from>
-      <to>Transfer From Raw To Final</to>
+      <to>Insert To Final Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -617,7 +495,7 @@ TBLPROPERTIES ('transactional'='true');
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Transfer From Raw To Final</from>
+      <from>Insert To Final Table</from>
       <to>Delete Unnecessary Rows</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -636,12 +514,21 @@ TBLPROPERTIES ('transactional'='true');
     </hop>
     <hop>
       <from>Delete Unnecessary Rows</from>
-      <to>Abort Delete Rows</to>
+      <to>Delete Rows Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>Create Final Hive Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
     </hop>
   </hops>
   <notepads>
