@@ -14,6 +14,7 @@ export class AddressValidationComponent implements OnInit {
   private address: Address;
   private showSuccessMessage: Boolean;
   private showFailMessage: Boolean;
+  private showErrorMessage: Boolean;
   private streetValueIsSet: Boolean;
   private numberValueIsSet: Boolean;
 
@@ -34,10 +35,12 @@ export class AddressValidationComponent implements OnInit {
     if (this.inputFieldsAreSet(address)) {
       this.addressService.validateAddress(address)
       .subscribe((res: AddressValidationDTO ) => {
-        if (res.addressExists) {
+        if (res.addressExists && res.querySuccessful) {
           this.showSuccessMessage = true;
-        } else {
+        } else if (!res.addressExists && res.querySuccessful) {
           this.showFailMessage = true;
+        } else {
+          this.showErrorMessage = true;
         }
       });
     }
@@ -58,6 +61,7 @@ export class AddressValidationComponent implements OnInit {
     this.numberValueIsSet = true;
     this.showSuccessMessage = false;
     this.showFailMessage = false;
+    this.showErrorMessage = false;
   }
 
 }
