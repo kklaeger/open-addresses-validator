@@ -380,7 +380,7 @@
       <script># Download the addresses file(s). The -O option is used to rename the file
 
 wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip ${ADDRESSES_DOWNLOAD_URL}
-wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip ${ADDRESSES_DOWNLOAD_URL2}</script>
+</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
@@ -406,7 +406,7 @@ wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip ${ADDRESSES_DOWNLOAD_URL2}</scr
       <script># Unzip the downloaded addresses. The -o option is used to overwrite files if they already exisit
 
 unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses.zip -d ${ADDRESSES_DOWNLOAD_DIR}
-unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</script>
+</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>

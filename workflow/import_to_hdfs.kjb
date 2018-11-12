@@ -361,7 +361,7 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>576</xloc>
+      <xloc>720</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -372,7 +372,7 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>576</xloc>
+      <xloc>720</xloc>
       <yloc>320</yloc>
     </entry>
     <entry>
@@ -392,7 +392,7 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>128</xloc>
+      <xloc>80</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -402,7 +402,7 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1232</xloc>
+      <xloc>1376</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -445,7 +445,7 @@ done</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
+      <xloc>496</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -456,7 +456,7 @@ done</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
+      <xloc>496</xloc>
       <yloc>320</yloc>
     </entry>
     <entry>
@@ -491,7 +491,7 @@ LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>816</xloc>
+      <xloc>960</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -502,7 +502,7 @@ LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>816</xloc>
+      <xloc>960</xloc>
       <yloc>320</yloc>
     </entry>
     <entry>
@@ -520,7 +520,7 @@ MSCK REPAIR TABLE addresses_raw;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1040</xloc>
+      <xloc>1184</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
@@ -531,8 +531,47 @@ MSCK REPAIR TABLE addresses_raw;
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1040</xloc>
+      <xloc>1184</xloc>
       <yloc>320</yloc>
+    </entry>
+    <entry>
+      <name>Directory Is Empty</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Directory Is Empty</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>272</xloc>
+      <yloc>320</yloc>
+    </entry>
+    <entry>
+      <name>Download Directory Is Not Empty</name>
+      <description/>
+      <type>EVAL_FILES_METRICS</type>
+      <result_filenames_wildcard/>
+      <Result_field_file/>
+      <Result_field_wildcard/>
+      <Result_field_includesubfolders/>
+      <fields>
+        <field>
+          <source_filefolder>/home/hadoop/openaddresses/raw</source_filefolder>
+          <wildcard/>
+          <include_subFolders>N</include_subFolders>
+        </field>
+      </fields>
+      <comparevalue>0</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successnumbercondition>greater</successnumbercondition>
+      <source_files>files</source_files>
+      <evaluation_type>size</evaluation_type>
+      <scale>bytes</scale>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>272</xloc>
+      <yloc>192</yloc>
     </entry>
   </entries>
   <hops>
@@ -544,15 +583,6 @@ MSCK REPAIR TABLE addresses_raw;
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
       <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>START</from>
-      <to>Prepare Download Directory</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
     </hop>
     <hop>
       <from>Prepare Download Directory</from>
@@ -615,6 +645,33 @@ MSCK REPAIR TABLE addresses_raw;
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>Download Directory Is Not Empty</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Download Directory Is Not Empty</from>
+      <to>Prepare Download Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Download Directory Is Not Empty</from>
+      <to>Directory Is Empty</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
       <unconditional>N</unconditional>
     </hop>
   </hops>
