@@ -545,12 +545,12 @@
   <order>
     <hop>
       <from>Select From Hive Table</from>
-      <to>Insert Into MySql Table</to>
+      <to>Insert Into MySQL Table</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Insert Into MySql Table</name>
+    <name>Insert Into MySQL Table</name>
     <type>InsertUpdate</type>
     <description/>
     <distribute>Y</distribute>
