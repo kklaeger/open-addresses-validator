@@ -406,7 +406,7 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Prepair Download Directory</name>
+      <name>Prepare Download Directory</name>
       <description/>
       <type>SHELL</type>
       <filename/>
@@ -449,10 +449,10 @@ done</script>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Prepair Directory Failed</name>
+      <name>Prepare Directory Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Prepair Directory Failed</message>
+      <message>Prepare Directory Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -547,7 +547,7 @@ MSCK REPAIR TABLE addresses_raw;
     </hop>
     <hop>
       <from>START</from>
-      <to>Prepair Download Directory</to>
+      <to>Prepare Download Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -555,7 +555,7 @@ MSCK REPAIR TABLE addresses_raw;
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Prepair Download Directory</from>
+      <from>Prepare Download Directory</from>
       <to>Import Data To HDFS Directory</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -564,8 +564,8 @@ MSCK REPAIR TABLE addresses_raw;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Prepair Download Directory</from>
-      <to>Prepair Directory Failed</to>
+      <from>Prepare Download Directory</from>
+      <to>Prepare Directory Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
