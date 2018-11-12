@@ -304,8 +304,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>112</xloc>
-      <yloc>240</yloc>
+      <xloc>240</xloc>
+      <yloc>192</yloc>
     </entry>
     <entry>
       <name>Create Download Directory</name>
@@ -316,8 +316,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>304</xloc>
-      <yloc>240</yloc>
+      <xloc>432</xloc>
+      <yloc>192</yloc>
     </entry>
     <entry>
       <name>Check If Directory Is Empty</name>
@@ -330,8 +330,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>240</yloc>
+      <xloc>640</xloc>
+      <yloc>192</yloc>
     </entry>
     <entry>
       <name>Delete Files</name>
@@ -348,19 +348,19 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>368</yloc>
+      <xloc>640</xloc>
+      <yloc>320</yloc>
     </entry>
     <entry>
-      <name>Abort Delete Files</name>
+      <name>Delete Files Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Error while deleting files</message>
+      <message>Delete Files Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>512</yloc>
+      <xloc>640</xloc>
+      <yloc>464</yloc>
     </entry>
     <entry>
       <name>Download Addresses File</name>
@@ -385,8 +385,8 @@ wget -O ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip ${ADDRESSES_DOWNLOAD_URL2}</scr
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>704</xloc>
-      <yloc>240</yloc>
+      <xloc>832</xloc>
+      <yloc>192</yloc>
     </entry>
     <entry>
       <name>Unzip Addresses File</name>
@@ -411,41 +411,41 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>880</xloc>
-      <yloc>240</yloc>
+      <xloc>1040</xloc>
+      <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Abort Download</name>
+      <name>Download Addresses Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Error while downloading data</message>
+      <message>Download Addresses Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>704</xloc>
-      <yloc>368</yloc>
+      <xloc>832</xloc>
+      <yloc>320</yloc>
     </entry>
     <entry>
-      <name>Abort Unzip</name>
+      <name>Unzip Addresses Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Error while unzipping files</message>
+      <message>Unzip Addresses Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>880</xloc>
-      <yloc>368</yloc>
+      <xloc>1040</xloc>
+      <yloc>320</yloc>
     </entry>
     <entry>
-      <name>Abort Create Directory</name>
+      <name>Create Directory Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Error while creating a new directory</message>
+      <message>Create Directory Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>304</xloc>
-      <yloc>368</yloc>
+      <xloc>432</xloc>
+      <yloc>320</yloc>
     </entry>
     <entry>
       <name>Success</name>
@@ -454,8 +454,8 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1072</xloc>
-      <yloc>240</yloc>
+      <xloc>1232</xloc>
+      <yloc>192</yloc>
     </entry>
   </entries>
   <hops>
@@ -488,7 +488,7 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
     </hop>
     <hop>
       <from>Delete Files</from>
-      <to>Abort Delete Files</to>
+      <to>Delete Files Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -524,7 +524,7 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
     </hop>
     <hop>
       <from>Download Addresses File</from>
-      <to>Abort Download</to>
+      <to>Download Addresses Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -533,7 +533,7 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
     </hop>
     <hop>
       <from>Unzip Addresses File</from>
-      <to>Abort Unzip</to>
+      <to>Unzip Addresses Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -542,7 +542,7 @@ unzip -o ${ADDRESSES_DOWNLOAD_DIR}/addresses2.zip -d ${ADDRESSES_DOWNLOAD_DIR}</
     </hop>
     <hop>
       <from>Create Download Directory</from>
-      <to>Abort Create Directory</to>
+      <to>Create Directory Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

@@ -430,10 +430,10 @@
       <yloc>224</yloc>
     </entry>
     <entry>
-      <name>Abort Create MySQL Table</name>
+      <name>Create MySQL Table Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Cannot create MySQL Table</message>
+      <message>Create MySQL Table Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -441,10 +441,10 @@
       <yloc>352</yloc>
     </entry>
     <entry>
-      <name>Abort Export Data</name>
+      <name>Export Data Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Cannot move Data to MySQL</message>
+      <message>Export Data Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -482,7 +482,7 @@
     </hop>
     <hop>
       <from>Create MySQL Table</from>
-      <to>Abort Create MySQL Table</to>
+      <to>Create MySQL Table Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -491,7 +491,7 @@
     </hop>
     <hop>
       <from>Export Data To MySQL Table</from>
-      <to>Abort Export Data</to>
+      <to>Export Data Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

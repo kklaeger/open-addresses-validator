@@ -12,6 +12,57 @@
   <modified_date>2018/11/07 12:19:43.964</modified_date>
   <parameters>
     </parameters>
+  <connection>
+    <name>hive</name>
+    <server>localhost</server>
+    <type>HIVE2</type>
+    <access>Native</access>
+    <database>default</database>
+    <port>10000</port>
+    <username>hadoop</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79a671da9da0ca</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>10000</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
   <slaveservers>
     </slaveservers>
   <job-log-table>
@@ -310,18 +361,18 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
+      <xloc>576</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Abort Create HDFS Directory</name>
+      <name>Import Data To HDFS Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Could not create HDFS directory</message>
+      <message>Import Data To HDFS Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
+      <xloc>576</xloc>
       <yloc>320</yloc>
     </entry>
     <entry>
@@ -345,50 +396,14 @@ hadoop fs -put -f ${ADDRESSES_DOWNLOAD_DIR} ${ADDRESSES_HADOOP_DIR}</script>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Clean Download Directory</name>
-      <description/>
-      <type>SHELL</type>
-      <filename/>
-      <work_directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script># Delete all files in the download directory
-
-rm -rf ${ADDRESSES_DOWNLOAD_DIR}/*</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>192</yloc>
-    </entry>
-    <entry>
       <name>Success</name>
       <description/>
       <type>SUCCESS</type>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>960</xloc>
+      <xloc>1232</xloc>
       <yloc>192</yloc>
-    </entry>
-    <entry>
-      <name>Abort Clean Directory</name>
-      <description/>
-      <type>ABORT</type>
-      <message>Cannot delete files from download directory</message>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>784</xloc>
-      <yloc>320</yloc>
     </entry>
     <entry>
       <name>Prepair Download Directory</name>
@@ -430,43 +445,100 @@ done</script>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>304</xloc>
+      <xloc>320</xloc>
       <yloc>192</yloc>
     </entry>
     <entry>
-      <name>Abort Prepair Download Directory</name>
+      <name>Prepair Directory Failed</name>
       <description/>
       <type>ABORT</type>
-      <message>Cannot prepair download directory successfully</message>
+      <message>Prepair Directory Failed</message>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>304</xloc>
+      <xloc>320</xloc>
+      <yloc>320</yloc>
+    </entry>
+    <entry>
+      <name>Create Raw Hive Table</name>
+      <description/>
+      <type>SQL</type>
+      <sql>CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
+	lon DOUBLE,
+	lat DOUBLE,
+	streetNumber STRING,
+	street STRING,
+	unit STRING,
+	city STRING,
+	district STRING,
+	region STRING,
+	postcode STRING,
+	id STRING,
+	hash STRING) 
+PARTITIONED BY (country STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
+
+
+
+
+</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>816</xloc>
+      <yloc>192</yloc>
+    </entry>
+    <entry>
+      <name>Create Hive Table Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Create Hive Table Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>816</xloc>
+      <yloc>320</yloc>
+    </entry>
+    <entry>
+      <name>Add Partitions To Raw Hive Table</name>
+      <description/>
+      <type>SQL</type>
+      <sql>SET hive.msck.path.validation=ignore;
+MSCK REPAIR TABLE addresses_raw;
+</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>hive</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1040</xloc>
+      <yloc>192</yloc>
+    </entry>
+    <entry>
+      <name>Add Partitions Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Add Partitions Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1040</xloc>
       <yloc>320</yloc>
     </entry>
   </entries>
   <hops>
     <hop>
       <from>Import Data To HDFS Directory</from>
-      <to>Abort Create HDFS Directory</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Clean Download Directory</from>
-      <to>Success</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Clean Download Directory</from>
-      <to>Abort Clean Directory</to>
+      <to>Import Data To HDFS Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -493,7 +565,43 @@ done</script>
     </hop>
     <hop>
       <from>Prepair Download Directory</from>
-      <to>Abort Prepair Download Directory</to>
+      <to>Prepair Directory Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Raw Hive Table</from>
+      <to>Add Partitions To Raw Hive Table</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Add Partitions To Raw Hive Table</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Raw Hive Table</from>
+      <to>Create Hive Table Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Add Partitions To Raw Hive Table</from>
+      <to>Add Partitions Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -502,7 +610,7 @@ done</script>
     </hop>
     <hop>
       <from>Import Data To HDFS Directory</from>
-      <to>Clean Download Directory</to>
+      <to>Create Raw Hive Table</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

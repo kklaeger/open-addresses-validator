@@ -303,7 +303,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>160</xloc>
+      <xloc>112</xloc>
       <yloc>144</yloc>
     </entry>
     <entry>
@@ -313,7 +313,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1200</xloc>
+      <xloc>1360</xloc>
       <yloc>144</yloc>
     </entry>
     <entry>
@@ -347,7 +347,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>352</xloc>
+      <xloc>304</xloc>
       <yloc>144</yloc>
     </entry>
     <entry>
@@ -381,19 +381,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>560</xloc>
+      <xloc>512</xloc>
       <yloc>144</yloc>
-    </entry>
-    <entry>
-      <name>Abort Workflow</name>
-      <description/>
-      <type>ABORT</type>
-      <message/>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>688</xloc>
-      <yloc>320</yloc>
     </entry>
     <entry>
       <name>Export Addresses To Enduser Database</name>
@@ -426,7 +415,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1008</xloc>
+      <xloc>960</xloc>
       <yloc>144</yloc>
     </entry>
     <entry>
@@ -460,8 +449,88 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>784</xloc>
+      <xloc>736</xloc>
       <yloc>144</yloc>
+    </entry>
+    <entry>
+      <name>Clean Download Directory</name>
+      <description/>
+      <type>SHELL</type>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script># Delete all files in the download directory
+
+rm -rf ${ADDRESSES_DOWNLOAD_DIR}/*</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1200</xloc>
+      <yloc>144</yloc>
+    </entry>
+    <entry>
+      <name>Clean Directory Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Clean Directory Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1200</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Download Addresses Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Download Addresses Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Export Addresses Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Export Addresses Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>960</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Optimize Addresses Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Optimize Addresses Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>736</xloc>
+      <yloc>288</yloc>
+    </entry>
+    <entry>
+      <name>Copy To HDFS Failed</name>
+      <description/>
+      <type>ABORT</type>
+      <message>Copy To HDFS Failed</message>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>512</xloc>
+      <yloc>288</yloc>
     </entry>
   </entries>
   <hops>
@@ -477,42 +546,6 @@
     <hop>
       <from>Download Addresses</from>
       <to>Copy Addresses To HDFS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Download Addresses</from>
-      <to>Abort Workflow</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Copy Addresses To HDFS</from>
-      <to>Abort Workflow</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Export Addresses To Enduser Database</from>
-      <to>Abort Workflow</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Export Addresses To Enduser Database</from>
-      <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -538,8 +571,62 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
+      <from>Clean Download Directory</from>
+      <to>Clean Directory Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Export Addresses To Enduser Database</from>
+      <to>Clean Download Directory</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Clean Download Directory</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Download Addresses</from>
+      <to>Download Addresses Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Copy Addresses To HDFS</from>
+      <to>Copy To HDFS Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
       <from>Optimize Addresses</from>
-      <to>Abort Workflow</to>
+      <to>Optimize Addresses Failed</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Export Addresses To Enduser Database</from>
+      <to>Export Addresses Failed</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
