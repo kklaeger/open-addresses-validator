@@ -372,8 +372,9 @@
       <name>Insert To Final Table</name>
       <description/>
       <type>SQL</type>
-      <sql>INSERT overwrite TABLE addresses_final partition(country)
-SELECT streetNumber, street, city, postcode, country FROM addresses_raw
+      <sql>-- Insert necessary columns from raw to final
+INSERT overwrite TABLE addresses_final partition(country)
+SELECT streetNumber, street, city, postcode, country FROM addresses_raw;
 
 
 
@@ -393,14 +394,15 @@ SELECT streetNumber, street, city, postcode, country FROM addresses_raw
       <name>Create Final Hive Table</name>
       <description/>
       <type>SQL</type>
-      <sql>CREATE TABLE IF NOT EXISTS addresses_final(
+      <sql>-- Create the final table that should only contain necessary information
+CREATE TABLE IF NOT EXISTS addresses_final(
 	streetNumber STRING,
 	street STRING,
 	city STRING,
 	postcode STRING) 
 PARTITIONED BY (country STRING)
 STORED AS ORC
-LOCATION 'hdfs://localhost:9000/user/hadoop/openaddresses/final'
+LOCATION '/user/hadoop/openaddresses/final'
 TBLPROPERTIES ('transactional'='true');
 
 
@@ -442,7 +444,8 @@ TBLPROPERTIES ('transactional'='true');
       <name>Delete Unnecessary Rows</name>
       <description/>
       <type>SQL</type>
-      <sql>DELETE FROM addresses_final WHERE streetNumber="NUMBER" AND street="STREET" AND city="CITY" AND postcode="POSTCODE";</sql>
+      <sql>-- Delete unneccessary rows from the final table
+DELETE FROM addresses_final WHERE streetNumber="NUMBER" AND street="STREET" AND city="CITY" AND postcode="POSTCODE";</sql>
       <useVariableSubstitution>F</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
       <sqlfilename/>

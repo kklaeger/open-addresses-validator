@@ -412,7 +412,8 @@
       <name>Create MySQL Table</name>
       <description/>
       <type>SQL</type>
-      <sql>CREATE TABLE IF NOT EXISTS addresses (
+      <sql>-- Create MySQL table that is used by the end-user-app
+CREATE TABLE IF NOT EXISTS addresses (
     streetNumber VARCHAR(255),
     street VARCHAR(255),
     city VARCHAR(255),

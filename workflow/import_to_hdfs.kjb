@@ -463,7 +463,8 @@ done</script>
       <name>Create Raw Hive Table</name>
       <description/>
       <type>SQL</type>
-      <sql>CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
+      <sql>-- Create the raw table that contains the entire information of the .csv files
+CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
 	lon DOUBLE,
 	lat DOUBLE,
 	streetNumber STRING,
@@ -477,7 +478,7 @@ done</script>
 	hash STRING) 
 PARTITIONED BY (country STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
+LOCATION '/user/hadoop/openaddresses/raw';
 
 
 
@@ -509,7 +510,8 @@ LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
       <name>Add Partitions To Raw Hive Table</name>
       <description/>
       <type>SQL</type>
-      <sql>SET hive.msck.path.validation=ignore;
+      <sql>-- Repair table to add partitions to the Hive table
+SET hive.msck.path.validation=ignore;
 MSCK REPAIR TABLE addresses_raw;
 </sql>
       <useVariableSubstitution>F</useVariableSubstitution>
