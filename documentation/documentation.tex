@@ -49,7 +49,7 @@
 
 \section{Aufbau des Projekts}
 
-Das Projekt besteht grundlegend aus einem Workflow, welcher für den Download und die Verarbeitung der Adressen zuständig ist, einer Weboberfläche zum Abfragen von Adressen und einem Backend welches die angefragten Adressen überprüft. Im Folgenden werden die einzelnen Teile genauer erläutert.
+Das Projekt besteht grundlegend aus einem Workflow, welcher für den Download und die Verarbeitung der Adressen zuständig ist, einer Weboberfläche zum Abfragen von Adressen und einem Backend welches die angefragten Adressen überprüft. Im Folgenden werden die einzelnen Jobs und Transformationen aufgelistet und die einzelnen Teile genauer erläutert.
 
 
 \section{Workflow}
@@ -57,35 +57,38 @@ Das Projekt besteht grundlegend aus einem Workflow, welcher für den Download un
 Der Ablauf setzt sich aus vier Schritten zusammen. Zunächst werden die Adressen von \url{http://results.openaddresses.io/} heruntergeladen und entpackt. Anschließend werden die Daten in das HDFS kopiert wo unnötige Zeilen und Spalten entfernt werden. Schließlich werden die Daten in eine End-User-Datenbank kopiert, von wo aus sie von einer separaten Anwendung verwendet werden können.
 
 
-\subsection{Main}
+\subsection{Job: Main}
 
 Der gesamte Workflow wird in einem main-Job verwaltet. Dieser Job enthält die einzelnen Schritte vom Download der Datei bis zum Export der Daten in eine End-User-Datenbank und dem Löschen des Download-Verzeichnisses. 
 
 
-\subsection{Download Addresses}
+\subsection{Job: Download Addresses}
 
 Im ersten Job wird zunächst das Download-Verzeichnis \texttt{openaddresses} erstellt, welches wiederum ein Verzeichnis \texttt{raw} enthält. Für diese Verzeichnisse wird überprüft ob noch Dateien enthalten sind, welche ggf. gelöscht werden. Anschließend wird die Adressdatei herunter geladen und entpackt, sodass sich im Verzeichnis \texttt{raw} die einzelnen Verzeichnisse der jeweiligen Länder befinden.
 
 
-\subsection{Copy Addresses to HDFS}
+\subsection{Job: Copy Addresses to HDFS}
 
-Bevor die Dateien in das HDFS kopiert werden, werden zunächst einige Vorbereitungen getroffen. Das in der Download-Datei enthaltene \texttt{Summary} Verzeichnis, sowie alle \glqq nicht-\texttt{.csv}-Dateien \grqq{}, werden gelöscht, da diese im weiteren Verlauf nicht benötigt werden. Da die Verzeichnisse der jeweiligen Länder Unterverzeichnisse enthalten können, werden außerdem alle Dateien aus den Unterverzeichnissen in das Root-Verzeichnis des jeweiligen Landes kopiert. Schließlich wird jedes Verzeichnis in \texttt{country=\textit{Länderkürzel}} umbenannt, damit später im HDFS leichter partitioniert werden kann.\\
+Bevor die Dateien in das HDFS kopiert werden, werden zunächst einige Vorbereitungen getroffen. Dazu wird zunächst überprüft, ob das Download-Verzeichnis überhaupt Daten enthält, um die weiteren Schritte nicht ohne Daten durchzuführen. Anschließend wird das in der Download-Datei enthaltene \texttt{Summary} Verzeichnis, sowie alle \glqq nicht-\texttt{.csv}-Dateien\grqq{}, gelöscht, da diese im weiteren Verlauf nicht benötigt werden. Da die Verzeichnisse der jeweiligen Länder Unterverzeichnisse enthalten können, werden außerdem alle Dateien aus den Unterverzeichnissen in das Root-Verzeichnis des jeweiligen Landes kopiert, da die Unterverzeichnisse für den weiteren Verlauf irrelevant sind und nur die \texttt{.csv}-Dateien benötigt werden. Schließlich wird jedes Verzeichnis in \texttt{country=\textit{Länderkürzel}} umbenannt, damit später im HDFS leichter partitioniert werden kann.\\
 
 Nach dieser Vorbereitung wird im HDFS das Root-Verzeichnis erstellt in welches das gesamte Download-Verzeichnis kopiert wird. Anschließend wird zunächst eine externe Tabelle mit allen Spalten der \texttt{.csv} Datei  in Hive angelegt. Diese erhält als Location den Ort, an dem das \texttt{raw}-Verzeichnis im HDFS gespeichert wurde. Des Weiteren wird diese Tabelle nach \texttt{country} partitioniert. Da durch die Struktur des Verzeichnis die Daten schon nach Ländern vor-partitioniert sind, muss Hive nur noch mitgeteilt werden, dass diese Verzeichnisse als Partitionen verwendet werden sollen. Dies kann einfach über den Befehl \texttt{MSCK REPAIR TABLE addresses} erreicht werden. Dadurch werden die \texttt{.csv} Dateien direkt in die Hive Tabelle geschrieben, sodass kein weiterer INSERT-Befehl notwendig ist.
 
 
-\subsection{Optimize Addresses}
+\subsection{Job: Optimize Addresses}
 
-Im nächsten Job sollen die Adressen optimiert werden. Dazu wird zunächst eine interne Hive Tabelle erstellt, welche die finalen Daten enthalten soll. Dazu werden nur die, für den weiteren Verlauf benötigten, Spalten ausgewählt. Diese sind Straße, Hausnummer, Stadt und Postleitzahl. Des Weiteren wird diese Tabelle wieder nach \texttt{country} partitioniert.\\
+Im nächsten Job sollen die Adressen optimiert werden. Dazu wird zunächst eine interne Hive Tabelle erstellt, welche die finalen Daten enthalten soll. Dazu werden nur die für den weiteren Verlauf benötigten Spalten ausgewählt. Diese sind Straße, Hausnummer, Stadt und Postleitzahl. Des Weiteren wird diese Tabelle wieder nach \texttt{country} partitioniert. Anschließend werden die finalen Daten aus der \texttt{raw} Tabelle in die \texttt{final} Tabelle kopiert. \\
 
-Anschließend werden die finalen Daten aus der \texttt{raw} Tabelle in die \texttt{final} Tabelle kopiert. \\
-
-Da die \texttt{.csv}-Dateien als Header die Spaltennamen besitzen, müssen diese Zeilen manuell entfernt werden. Dazu werden im letzten Schritt dieses Jobs alle Zeilen entfernt, deren Einträge city=\glqq CITY\grqq{}, postcode=\glqq POSTCODE\grqq{}, usw. besitzen.
+Da die \texttt{.csv}-Dateien als Header die Spaltennamen besitzen, müssen diese Zeilen manuell entfernt werden. Dazu werden im letzten Schritt dieses Jobs alle Zeilen entfernt, deren Einträge city=\glqq CITY\grqq{}, postcode=\glqq POSTCODE\grqq{}, usw. sind.
 
 	
-\subsection{Export Addresses To Enduser Database}
+\subsection{Job: Export Addresses To Enduser Database}
 
-Im letzten Job werden die Adressen in eine End-User-Datenbank kopiert. Dazu wird zunächst eine MySQL Tabelle erstellt, die alle nötigen Spalten besitzt. Anschließend selektiert eine Transformation die Daten aus der Hive Tabelle und kopiert sie in die finale MySQL Tabelle.
+Im letzten Job werden die Adressen in eine End-User-Datenbank kopiert. Dazu wird zunächst eine MySQL Tabelle erstellt, die alle nötigen Spalten besitzt. Anschließend wird eine Transformation verwendet, um die Daten aus der Hive Tabelle in die MySQL Tabelle zu transformieren.
+
+
+\subsubsection{Transformation: Export Data To MySQL Table}
+
+Die Transformation selektiert zunächst alle Daten aus der Hive Tabelle. Dabei kann über die Variable \texttt{ADDRESSES\_EXPORT\_LIMIT} die Anzahl zu exportierender Daten festgelegt werden. Anschließend werden die ausgewählten Daten in eine MySQL Tabelle geschrieben.
 
 
 \section{Client}

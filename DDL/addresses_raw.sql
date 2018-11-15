@@ -13,9 +13,5 @@ CREATE EXTERNAL TABLE IF NOT EXISTS addresses_raw(
 	hash STRING) 
 PARTITIONED BY (country STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-LOCATION '${ADDRESSES_HADOOP_DIR}/raw';
-
--- Repair table to add partitions to the Hive table
-SET hive.msck.path.validation=ignore;
-MSCK REPAIR TABLE addresses_raw;
+LOCATION '/user/hadoop/openaddresses/raw';
 
