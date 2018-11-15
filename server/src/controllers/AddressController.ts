@@ -23,15 +23,15 @@ export class AddressController{
         db.query(sql, [street, streetNumber, city, postcode], (err, result) => {
             if (err) {
                 log.error('mySQL', 'Connection Error', err.message);
-                res.send({addressExists: false, querySuccessful: false})
+                res.send({addressExists: false})
             } else {
                 log.info('mySQL', 'Requested address:', [street, streetNumber, city, postcode]);
                 if(result) {
                     log.info('mySQL', 'Found ' + result.length + ' addresses');
                     if (result.length > 0) {
-                        res.send({addressExists: true, querySuccessful: true})
+                        res.send({addressExists: true})
                     } else {
-                        res.send({addressExists: false, querySuccessful: true})
+                        res.send({addressExists: false})
                     } 
                 }
             }
